@@ -122,6 +122,20 @@ function islandora_saved_searches_save_search_form($form, &$form_state) {
  * Ensures name is not an empty string.
  */
 function islandora_saved_searches_save_search_form_validate($form, &$form_state) {
+  global $user;
+
+  // Double check that there are no duplicate searches in the database.
+  $name = filter_xss($form_state['values']['name'], array());
+  $query = db_select(ISLANDORA_SAVED_SEARCHES_TABLE, 's');
+  $result = $query->fields('s', array('id'))
+    ->condition('s.uid', $user->uid)
+    ->condition('s.name', $name)
+    ->execute();
+
+  if ($result->rowCount() > 0) {
+    form_set_error('name', t('You have already saved a search called "@name", please choose another name.', array('@name' => $name)));
+  }
+
   if (empty($form_state['values']['name'])) {
     form_set_error('name', t('"Name" field cannot be empty.'));
   }
