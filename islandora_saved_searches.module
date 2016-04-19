@@ -107,7 +107,7 @@ function islandora_saved_searches_save_search_form($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Name'),
     '#description' => t('A useful name/label for this search.'),
-    '#maxlength' => 50,
+    '#maxlength' => 255,
   );
   $form['submit'] = array(
     '#type' => 'submit',
@@ -134,7 +134,7 @@ function islandora_saved_searches_save_search_form_submit($form, &$form_state) {
   global $user;
 
   // Build saved search parameters.
-  $name = check_plain($form_state['values']['name']);
+  $name = filter_xss($form_state['values']['name'], array());
   $path = current_path();
   $query = drupal_get_query_parameters();
 

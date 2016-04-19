@@ -29,7 +29,7 @@ function islandora_saved_searches_schema() {
       'name' => array(
         'description' => 'The displayed name for this saved search.',
         'type' => 'varchar',
-        'length' => 50,
+        'length' => 255,
         'not null' => TRUE,
       ),
       'created' => array(
